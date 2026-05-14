@@ -7,7 +7,7 @@ import (
 
 func WordFrequencyCounter(input string) map[string]int {
 	frequency := make(map[string]int)
-	each := strings.Split(input, " ")
+	each := strings.Fields(input)
 	for _, v := range each {
 		frequency[v] += 1
 	}
