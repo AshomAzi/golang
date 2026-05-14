@@ -1,22 +1,24 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-func UniqueCharacterChecker(input string) map[rune]bool {
-	seen := map[rune]bool{}
-	for _, v := range input {
-		seen[v] = true
-		for u := range seen {
-			// fmt.Println(u)
-			if v == u {
-				seen[v] = false
-				fmt.Println("Seen")
-				break
-			
-			}
+func UniqueCharacterChecker(input string) bool {
+	seen := make(map[rune]bool)
+
+	for _, val := range input {
+		if seen[val] {
+			fmt.Println(seen)
+			return false
+
+		}else {
+			seen[val] = true
 		}
 	}
-	return seen
+
+	fmt.Println(seen)
+	return true
 }
 
 func main() {
