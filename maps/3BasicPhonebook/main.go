@@ -11,6 +11,15 @@ func AddContact(name, number string, contacts map[string]string) map[string]stri
 
 	contacts[name] = number
 
+	data, err := os.Create("data.txt")
+	if err == nil {
+		writer := bufio.NewWriter(data)
+		writer.WriteString(name+":"+number)
+		writer.Flush()
+	} else {
+		fmt.Print("Error: ", err)
+	}
+
 	return contacts
 
 }
