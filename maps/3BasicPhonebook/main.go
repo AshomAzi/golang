@@ -7,22 +7,43 @@ import (
 	"strings"
 )
 
-func AddContact(name, number string, contacts map[string]string) map[string]string {
+func AddContact(name, number string, contacts map[string]string) {
 
+	for key := range contacts {
+		if key == name {
+			fmt.Println("key already exist with the number:", contacts[key])
+		}
+	}
 	contacts[name] = number
 
-	data, err := os.OpenFile("data.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
+	data, err := os.OpenFile("data.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err == nil {
 		writer := bufio.NewWriter(data)
-		writer.WriteString(name+":"+number+"\n")
+		writer.WriteString(name + ":" + number + "\n")
 		fmt.Println("User created successgully.")
 		writer.Flush()
 	} else {
 		fmt.Print("Error: ", err)
 	}
+}
 
-	return contacts
+func SearchName(input, file string) {
 
+	content, err := os.ReadFile(file)
+	if err != nil {
+		fmt.Print("Error:", err)
+	}
+
+	newContent := strings.Fields(string(content))
+	for _, v := range newContent {
+		if strings.Contains(v, input) {
+			fmt.Println(v)
+			break
+		} else {
+			fmt.Println("Contact does not exist!")
+			break
+		}
+	}
 }
 
 func TotalContacts(contacts map[string]string) int {
@@ -39,6 +60,7 @@ func main() {
 	fmt.Println("6. Exit")
 
 	contacts := make(map[string]string)
+
 	for {
 		fmt.Print("Chose any number from the options above: ")
 		option := bufio.NewScanner(os.Stdin)
@@ -63,8 +85,18 @@ func main() {
 				} else {
 					fmt.Println("Invalid name!")
 				}
+			} else if each[0] == "2" {
+				fmt.Print("Input the name (key) to search for: ")
+				rawname := bufio.NewScanner(os.Stdin)
+				rawname.Scan()
+				name := rawname.Text()
+				newName := strings.Fields(name)
+				if !strings.Contains(newName[0], " ") {
+					SearchName(newName[0], "data.txt")
+				} else {
+					fmt.Println("Invalid key, name must not contain space!")
+				}
 			} else if each[0] == "6" {
-				fmt.Println(contacts)
 				os.Exit(1)
 			} else {
 				fmt.Println("Invalid Option!")
@@ -75,7 +107,3 @@ func main() {
 	}
 
 }
-
-
-
-				
