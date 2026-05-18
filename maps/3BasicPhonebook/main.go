@@ -11,10 +11,11 @@ func AddContact(name, number string, contacts map[string]string) map[string]stri
 
 	contacts[name] = number
 
-	data, err := os.Create("data.txt")
+	data, err := os.OpenFile("data.txt", os.O_APPEND | os.O_CREATE | os.O_WRONLY, 0644)
 	if err == nil {
 		writer := bufio.NewWriter(data)
-		writer.WriteString(name+":"+number)
+		writer.WriteString(name+":"+number+"\n")
+		fmt.Println("User created successgully.")
 		writer.Flush()
 	} else {
 		fmt.Print("Error: ", err)
